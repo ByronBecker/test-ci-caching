@@ -2,9 +2,10 @@ name: CI
 
 on: 
   workflow_run:
-   workflows: ["Cache Setup"]
-   branches: "*"
-   types: [completed]
+    workflows: ["Cache Setup"]
+    types: [completed]
+    branches:
+      - '*'
 
 jobs:
   tests:

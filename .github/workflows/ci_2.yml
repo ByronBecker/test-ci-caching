@@ -3,7 +3,6 @@ name: CI 2
 on: 
   workflow_run:
    workflows: ["Cache Setup"]
-   branches: ["*"]
    types: [completed]
 
 jobs:
