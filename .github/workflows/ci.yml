@@ -14,10 +14,6 @@ jobs:
           wget https://github.com/bytecodealliance/wasmtime/releases/download/v0.18.0/wasmtime-v0.18.0-x86_64-linux.tar.xz
           tar xf wasmtime-v0.18.0-x86_64-linux.tar.xz
           cp wasmtime-v0.18.0-x86_64-linux/wasmtime /home/runner/bin/wasmtime
-      - uses: aviate-labs/setup-dfx@v0.2.3
-        with:
-          dfx-version: 0.13.1
-          vessel-version: 0.6.4
       - uses: actions/setup-node@v3
         with:
           node-version: 18
