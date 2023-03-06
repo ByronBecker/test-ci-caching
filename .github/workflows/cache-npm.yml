@@ -1,18 +1,17 @@
 name: Cache npm
 
-on: workflow_dispatch
+on: push 
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Cache npm
         id: cacheNpm
         uses: actions/cache@v3
         env:
-          cache-name: cacheNpm
+          cache-name: cache-npm
         with:
           # npm cache files are stored in `~/.npm` on Linux/macOS
           path: ~/.npm
