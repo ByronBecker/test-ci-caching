@@ -16,8 +16,9 @@ jobs:
           #wasmtime should be stored in /home/runner/bin/wasmtime
           path: /home/runner/bin/wasmtime
           key: ${{ runner.os }}-build-${{ env.cache-name }}}}
+
       - name: Install wasmtime 
-      - if: steps.cacheWasmtime.outputs.cache-hit != 'true'
+        if: steps.cacheWasmtime.outputs.cache-hit != 'true'
         run: 
           mkdir /home/runner/bin
           echo "/home/runner/bin" >> $GITHUB_PATH
