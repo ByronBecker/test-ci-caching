@@ -30,7 +30,7 @@ jobs:
           cp wasmtime-v0.18.0-x86_64-linux/wasmtime /home/runner/bin/wasmtime
 
       - name: Install Node
-      - uses: actions/setup-node@v3
+        uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
