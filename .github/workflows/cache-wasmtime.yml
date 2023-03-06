@@ -20,7 +20,7 @@ jobs:
       - name: Install wasmtime 
         if: steps.cacheWasmtime.outputs.cache-hit != 'true'
         run: 
-          mkdir /home/runner/bin
+          mkdir -p /home/runner/bin
           echo "/home/runner/bin" >> $GITHUB_PATH
           wget https://github.com/bytecodealliance/wasmtime/releases/download/v0.18.0/wasmtime-v0.18.0-x86_64-linux.tar.xz
           tar xf wasmtime-v0.18.0-x86_64-linux.tar.xz
