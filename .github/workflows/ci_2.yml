@@ -2,13 +2,36 @@ name: CI 2
 
 on: 
   workflow_run:
-   workflows: ["Cache Setup"]
-   types: [completed]
+    workflows: ["Cache Setup"]
+    types: [completed]
+    branches:
+      - '*'
 
 jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
+      - name: Advertise check in PR
+        id: initcheck
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs'),
+                  sha = fs.readFileSync('SHA', 'utf8'),
+                  args = {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    head_sha: sha,
+                    name: 'Test ci 2 on ${{ matrix.os }}',
+                    status: 'in_progress'
+                  };
+            console.log("Arguments:", args);
+            let result = await github.rest.checks.create(args);
+            console.log("Result:", result);
+            return {
+              check_run_id: result.data.id
+            };
+
       - uses: actions/checkout@v3
       - name: Cache wasmtime
         id: cacheWasmtime 

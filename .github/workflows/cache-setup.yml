@@ -47,3 +47,10 @@ jobs:
         if: steps.cacheNpm.outputs.cache-hit != 'true'
         run: npm i
 
+      - name: Get name (pull request)
+        if: github.event_name == 'pull_request'
+        run: |
+          echo -n pr-${{ github.event.number }} > dist/NAME
+          echo -n ${{ github.event.number }} > dist/PR
+          echo -n ${{ github.event.pull_request.head.sha }} > dist/SHA
+
