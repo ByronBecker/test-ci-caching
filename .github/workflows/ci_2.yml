@@ -1,0 +1,51 @@
+name: CI 2
+
+on: 
+  workflow_run:
+   workflows: ["Cache Setup"]
+   types: [completed]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Cache wasmtime
+        id: cacheWasmtime 
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-wasmtime
+        with:
+          #wasmtime should be stored in /home/runner/bin/wasmtime
+          path: /home/runner/bin/wasmtime
+          key: ${{ runner.os }}-build-${{ env.cache-name }}}}
+      
+      - uses: actions/checkout@v3
+      - name: Cache npm modules 
+        id: cacheNpm 
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-npm
+        with:
+          path: | 
+            **/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install wasmtime 
+        if: steps.cacheWasmtime.outputs.cache-hit != 'true'
+        run: 
+          mkdir -p /home/runner/bin
+          echo "/home/runner/bin" >> $GITHUB_PATH
+          wget https://github.com/bytecodealliance/wasmtime/releases/download/v0.18.0/wasmtime-v0.18.0-x86_64-linux.tar.xz
+          tar xf wasmtime-v0.18.0-x86_64-linux.tar.xz
+          cp wasmtime-v0.18.0-x86_64-linux/wasmtime /home/runner/bin/wasmtime
+      
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install Node modules
+        if: steps.cacheNpm.outputs.cache-hit != 'true'
+        run: npm i
