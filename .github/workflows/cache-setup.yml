@@ -47,10 +47,11 @@ jobs:
         if: steps.cacheNpm.outputs.cache-hit != 'true'
         run: npm i
 
-      - name: Get name (pull request)
-        if: github.event_name == 'pull_request'
+      - name: Recognize sha ref
+        id: sharef
         run: |
-          echo -n pr-${{ github.event.number }} > dist/NAME
-          echo -n ${{ github.event.number }} > dist/PR
-          echo -n ${{ github.event.pull_request.head.sha }} > dist/SHA
+          echo "::set-output name=sha::$(echo ${{ github.event.pull_request.head.sha }})"
+        env:
+          EVENT: ${{ github.event_name }}
+          REF: ${{ github.ref }}
 
