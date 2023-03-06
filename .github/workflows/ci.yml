@@ -22,5 +22,3 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-      - name: Canister integration test suite
-        run: npm run setup && npm run test:cycleops

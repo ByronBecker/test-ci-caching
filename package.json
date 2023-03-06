@@ -1,0 +1,22 @@
+{
+  "name": "test-ci-caching",
+  "version": "1.0.0",
+  "description": "Testing out CI caching",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ByronBecker/test-ci-caching.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ByronBecker/test-ci-caching/issues"
+  },
+  "homepage": "https://github.com/ByronBecker/test-ci-caching#readme",
+  "devDependencies": {
+    "typescript": "^4.9.5"
+  }
+}
