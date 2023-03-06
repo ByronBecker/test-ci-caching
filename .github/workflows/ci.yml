@@ -19,6 +19,17 @@ jobs:
           #wasmtime should be stored in /home/runner/bin/wasmtime
           path: /home/runner/bin/wasmtime
           key: ${{ runner.os }}-build-${{ env.cache-name }}}}
+      
+      - uses: actions/checkout@v3
+      - name: Cache npm modules 
+        id: cacheNpm 
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-npm
+        with:
+          path: | 
+            **/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Install wasmtime 
         if: steps.cacheWasmtime.outputs.cache-hit != 'true'
@@ -28,10 +39,13 @@ jobs:
           wget https://github.com/bytecodealliance/wasmtime/releases/download/v0.18.0/wasmtime-v0.18.0-x86_64-linux.tar.xz
           tar xf wasmtime-v0.18.0-x86_64-linux.tar.xz
           cp wasmtime-v0.18.0-x86_64-linux/wasmtime /home/runner/bin/wasmtime
-
+      
       - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
-        run: "npm i"
+
+      - name: Install Node modules
+        if: steps.cacheNpm.outputs.cache-hit != 'true'
+        run: npm i

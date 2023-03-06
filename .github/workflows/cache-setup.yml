@@ -17,6 +17,17 @@ jobs:
           path: /home/runner/bin/wasmtime
           key: ${{ runner.os }}-build-${{ env.cache-name }}}}
 
+      - uses: actions/checkout@v3
+      - name: Cache npm modules 
+        id: cacheNpm 
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-npm
+        with:
+          path: | 
+            **/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install wasmtime 
         if: steps.cacheWasmtime.outputs.cache-hit != 'true'
         run: 
@@ -31,4 +42,8 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-        run: "npm i"
+      
+      - name: Install Node modules
+        if: steps.cacheNpm.outputs.cache-hit != 'true'
+        run: npm i
+
