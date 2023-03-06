@@ -1,0 +1,27 @@
+name: Cache Wasmtime
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache wasmtime
+        id: cacheWasmtime 
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-wasmtime
+        with:
+          #wasmtime should be stored in /home/runner/bin/wasmtime
+          path: /home/runner/bin/wasmtime
+          key: ${{ runner.os }}-build-${{ env.cache-name }}}}
+      - name: Install wasmtime 
+      - if: steps.cacheWasmtime.outputs.cache-hit != 'true'
+      run: |
+        mkdir /home/runner/bin
+        echo "/home/runner/bin" >> $GITHUB_PATH
+        wget https://github.com/bytecodealliance/wasmtime/releases/download/v0.18.0/wasmtime-v0.18.0-x86_64-linux.tar.xz
+        tar xf wasmtime-v0.18.0-x86_64-linux.tar.xz
+        cp wasmtime-v0.18.0-x86_64-linux/wasmtime /home/runner/bin/wasmtime
+        
