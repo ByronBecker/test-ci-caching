@@ -1,6 +1,10 @@
 name: CI
 
-on: [push, pull_request]
+on: 
+  workflow_run:
+   workflows: ["Cache Wasmtime", "Cache npm"]
+   types:
+     - completed
 
 jobs:
   tests:
@@ -16,6 +20,7 @@ jobs:
           #wasmtime should be stored in /home/runner/bin/wasmtime
           path: /home/runner/bin/wasmtime
           key: ${{ runner.os }}-build-${{ env.cache-name }}}}
+
       - name: Install wasmtime 
         if: steps.cacheWasmtime.outputs.cache-hit != 'true'
         run: 
@@ -25,6 +30,7 @@ jobs:
           tar xf wasmtime-v0.18.0-x86_64-linux.tar.xz
           cp wasmtime-v0.18.0-x86_64-linux/wasmtime /home/runner/bin/wasmtime
 
+      - name: Install Node
       - uses: actions/setup-node@v3
         with:
           node-version: 18
